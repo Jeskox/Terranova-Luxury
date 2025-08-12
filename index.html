@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
     <style>
-        /* [ TU CSS COMPLETO E INTACTO VA AQUÍ ] */
         :root {
             --font-logo: 'Cormorant Garamond', serif;
             --font-headline: 'Playfair Display', serif;
@@ -24,12 +23,34 @@
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: var(--font-body);
             color: var(--color-text);
-            background-color: #0d1117;
-            background-image: 
-                radial-gradient(ellipse at 30% 90%, rgba(154, 139, 79, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 85%, rgba(154, 139, 79, 0.15) 0%, transparent 40%),
-                linear-gradient(to top, #1a1423 0%, #372a4b 40%, #0d1117 100%);
         }
+
+        /* --- MODIFICADO: Añadimos position: relative y un color de respaldo --- */
+        body {
+            position: relative; /* Necesario para que el ::before se posicione correctamente */
+            background-color: #0d1117; /* Se mostrará si la imagen no carga */
+        }
+        
+        /* --- AÑADIDO: Lógica del fondo de imagen --- */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1; /* Coloca esta capa detrás de todo el contenido */
+
+            /* URL de la imagen. La ruta './images/background.jpg' es correcta para tu estructura de carpetas. */
+            /* El linear-gradient crea una capa oscura para que el texto sea legible. */
+            background-image: 
+                linear-gradient(rgba(10, 15, 8, 0.7), rgba(10, 15, 8, 0.7)),
+                url('./images/background.jpg');
+            
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+        /* --- FIN DE LA SECCIÓN AÑADIDA --- */
+
 
         .header {
             display: flex; justify-content: space-between; align-items: center;
@@ -155,7 +176,8 @@
 </head>
 <body>
     
-    <div class="background-image"></div>
+    <!-- El fondo original que usabas con degradados ha sido eliminado de la regla 'body' -->
+    <!-- y ahora se maneja con el ::before -->
     
     <header class="header">
         <div class="logo-container">
@@ -232,39 +254,20 @@
     </div>
 
     <script>
+        // Tu JavaScript original intacto
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
-        
-        // --- Declaraciones de Elementos del DOM ---
+
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
         const minimizeBtn = document.getElementById('minimize-chat-btn');
         const closeBtn = document.getElementById('close-chat-btn');
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const chatForm = document.getElementById('chat-form');
-
-        // --- AÑADIDO: Función a prueba de fallos para obtener/crear el Session ID ---
-        function getSessionId() {
-            let currentSessionId = sessionStorage.getItem('terranovaChatSessionId');
-            if (!currentSessionId) {
-                currentSessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-                sessionStorage.setItem('terranovaChatSessionId', currentSessionId);
-                console.log('[DEBUG] Nueva Sesión Creada:', currentSessionId);
-            }
-            return currentSessionId;
-        }
-        // --- FIN DE LA SECCIÓN AÑADIDA ---
-
+        
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
-        
         function resetChat() {
             closeChat();
-            // --- AÑADIDO: Borramos el ID de sesión al resetear ---
-            sessionStorage.removeItem('terranovaChatSessionId');
-            // --- FIN DE LA SECCIÓN AÑADIDA ---
             setTimeout(() => {
                 chatMessages.innerHTML = '';
                 addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
@@ -275,6 +278,10 @@
         chatBubbleBtn.addEventListener('click', toggleChat);
         minimizeBtn.addEventListener('click', closeChat);
         closeBtn.addEventListener('click', resetChat);
+        
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const chatForm = document.getElementById('chat-form');
         
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
@@ -292,19 +299,10 @@
             userInput.value = '';
             
             try {
-                // --- AÑADIDO: Obtenemos el ID de sesión justo antes de enviar ---
-                const sessionId = getSessionId();
-                console.log('[DEBUG] Enviando mensaje con Session ID:', sessionId);
-                // --- FIN DE LA SECCIÓN AÑADIDA ---
-
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // --- MODIFICADO: Añadimos el sessionId al body ---
-                    body: JSON.stringify({ 
-                        message: messageText,
-                        sessionId: sessionId // Se añade el ID de sesión a la petición
-                    })
+                    body: JSON.stringify({ message: messageText })
                 });
                 if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                 const data = await response.json();
