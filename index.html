@@ -27,8 +27,7 @@
 
         .background-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* === ¡IMPORTANTE! PEGA AQUÍ LA URL PÚBLICA DE TU IMAGEN DE SUPABASE === */
-            background-image: url('https://txojnxpvigsbkxegyghz.supabase.co/storage/v1/object/public/public-assets/background.jpg');
+            background-image: url('background.jpg');
             background-size: cover; background-position: center;
             filter: brightness(0.4) saturate(0.8); z-index: -1;
         }
@@ -60,7 +59,7 @@
         }
         .text-container { max-width: 600px; text-align: left; }
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 3.8rem; /* Tamaño reducido */
+            font-family: var(--font-headline); font-size: 3.8rem;
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
@@ -69,7 +68,7 @@
 
         .action-button-container {
             padding-right: 4rem;
-            margin-top: 5rem; /* Desplazado hacia abajo */
+            margin-top: 5rem;
         }
         .call-to-action {
             background-color: transparent; border: 2px solid var(--color-gold);
@@ -94,14 +93,14 @@
 
         .action-bubbles {
             position: fixed; bottom: 3rem; right: 4rem;
-            display: flex; gap: 1rem; z-index: 5; align-items: center; /* Alineación horizontal */
+            display: flex; gap: 1rem; z-index: 5; align-items: center;
         }
         .action-circle {
             height: 60px; border-radius: 30px;
             background-color: rgba(0, 0, 0, 0.5); border: 1px solid #444;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; cursor: pointer; transition: all 0.3s ease;
-            padding: 0 1.2rem; /* Padding para acomodar texto */
+            padding: 0 1.2rem;
         }
         .action-circle.icon-only { width: 60px; padding: 0; }
         .action-circle span { color: #fff; font-weight: 500; margin-right: 0.75rem; }
@@ -109,7 +108,6 @@
         .action-circle:hover { border-color: var(--color-gold); }
         .action-circle:hover svg, .action-circle:hover span { color: var(--color-gold); fill: var(--color-gold); }
 
-        /* --- Estilos del Chat Modal --- */
         #chat-widget { display: block; }
         .chat-window {
             position: fixed; bottom: 3rem; right: 4rem; 
@@ -128,9 +126,8 @@
         
         .chat-header {
             padding: 1rem 1.5rem; text-align: left;
-            font-weight: 600; /* Resaltado */
-            color: var(--color-gold); 
-            text-shadow: 0 0 5px rgba(154, 139, 79, 0.5); /* Sombra sutil */
+            font-weight: 600; color: var(--color-gold); 
+            text-shadow: 0 0 5px rgba(154, 139, 79, 0.5);
             flex-shrink: 0; position: relative;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background-color: var(--color-glass-header);
@@ -148,19 +145,8 @@
         .user-message { align-self: flex-end; background-color: var(--color-gold); color: #000; font-weight: 500; border-bottom-right-radius: 4px; }
 
         .chat-input-area { padding: 1rem; flex-shrink: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--color-glass-header); }
-        .input-frame {
-            position: relative;
-            padding: 2px;
-            background: linear-gradient(135deg, var(--color-gold), #444);
-            clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
-        }
-        .input-frame-inner {
-            background-color: #111;
-            padding: 0.5rem;
-            clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
-            display: flex;
-            align-items: center;
-        }
+        .input-frame { position: relative; padding: 2px; background: linear-gradient(135deg, var(--color-gold), #444); clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%); }
+        .input-frame-inner { background-color: #111; padding: 0.5rem; clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%); display: flex; align-items: center; }
         .input-frame-inner input { flex-grow: 1; border: none; background: transparent; padding: 0.5rem; color: #fff; font-size: 1rem; font-family: var(--font-body); }
         .input-frame-inner input:focus { outline: none; }
         .input-frame-inner button { background: transparent; border: none; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
@@ -179,7 +165,7 @@
         <div class="header-home" title="Inicio">
             <span>Home</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
             </svg>
         </div>
     </header>
