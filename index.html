@@ -4,114 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terranova Luxury Homes - Demo IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-        
+        :root {
+            --font-primary: 'Montserrat', sans-serif;
+            --font-luxury: 'Cormorant Garamond', serif;
+            --color-gold: #D4AF37; /* Tono dorado premium */
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-primary);
             color: #fff;
+            background-color: #000;
         }
 
         .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://i.imgur.com/7bW9wL5.jpeg');
-            background-size: cover;
-            background-position: center;
-            filter: brightness(0.4) saturate(0.8);
-            z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://e1.pxfuel.com/desktop-wallpaper/440/130/desktop-wallpaper-modern-luxury-mansions-in-luxury-mansion.jpg');
+            background-size: cover; background-position: center;
+            filter: brightness(0.4) saturate(0.8); z-index: -1;
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 4rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-sizing: border-box;
-            z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 2rem 4rem; position: fixed; width: 100%; top: 0;
+            box-sizing: border-box; z-index: 10;
         }
-
         .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            font-family: var(--font-luxury);
+            font-size: 2rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         .main-content {
-            display: flex;
-            align-items: center;
-            height: 100vh;
-            padding-left: 4rem;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 5;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 100vh; padding: 0 4rem; box-sizing: border-box;
+            position: relative; z-index: 5;
         }
-
-        .text-container {
-            max-width: 600px;
-            text-align: left;
+        .text-container { max-width: 600px; text-align: left; }
+        .text-container h1 { font-size: 3.5rem; font-weight: 700; margin: 0 0 1rem 0; font-family: var(--font-primary);}
+        .text-container p { font-size: 1.2rem; color: #d1d5db; line-height: 1.6; }
+        
+        .action-button-container {
+            padding-right: 4rem;
         }
-
-        .text-container h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 0 0 1rem 0;
-        }
-
-        .text-container p {
-            font-size: 1.2rem;
-            font-weight: 400;
-            color: #d1d5db;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .demo-buttons {
-            position: absolute;
-            bottom: 3rem;
-            left: 4rem;
-            display: flex;
-            gap: 1.5rem;
-            z-index: 5;
-        }
-
-        .demo-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 2px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            text-decoration: none;
-            color: #fff;
+        .call-to-action {
+            background-color: transparent;
+            border: 2px solid var(--color-gold);
+            color: var(--color-gold);
+            padding: 1rem 2.5rem;
+            font-family: var(--font-primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .demo-circle:hover {
-            transform: scale(1.1);
-            border-color: #f0f0f0;
-            background-color: rgba(255, 255, 255, 0.2);
+        .call-to-action:hover {
+            background-color: var(--color-gold);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
+
+        .social-buttons {
+            position: absolute; bottom: 3rem; right: 4rem; /* Cambiado a la derecha */
+            display: flex; gap: 1.5rem; z-index: 5;
+        }
+        .social-circle {
+            width: 60px; height: 60px; border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5); border: 1px solid #444;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: #fff; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .social-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; }
+        .social-circle:hover { border-color: var(--color-gold); }
+        .social-circle:hover svg { fill: var(--color-gold); }
+
+        /* --- Estilos del Chat Modal --- */
+        #chat-widget { display: none; } /* Oculto por defecto */
+        #chat-widget.active { display: block; }
+
+        .chat-bubble-button {
+            position: fixed; bottom: 3rem; right: 4rem; width: 60px; height: 60px;
+            background-color: #000; border-radius: 50%; z-index: 1000;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid var(--color-gold);
+        }
+        .chat-bubble-button svg { width: 28px; height: 28px; fill: var(--color-gold); }
+
+        .chat-window {
+            position: fixed; bottom: 100px; right: 4rem; width: 400px; height: 70vh;
+            max-height: 600px; background-color: #0c0a09; border-radius: 15px;
+            z-index: 999; overflow: hidden;
+            border: 1px solid #444; display: flex; flex-direction: column;
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #chat-widget.active .chat-window { opacity: 1; transform: translateY(0); }
+        
+        .chat-header {
+            padding: 1.2rem; text-align: center; font-weight: 500;
+            color: var(--color-gold); flex-shrink: 0;
+            border-bottom: 1px solid #444; background-color: #111;
+        }
+
+        .chat-messages {
+            flex-grow: 1; padding: 1.5rem; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+        .message { max-width: 80%; line-height: 1.6; font-size: 0.95rem; padding: 0.8rem 1.2rem; border-radius: 18px; }
+        .bot-message { align-self: flex-start; background-color: #222; border-bottom-left-radius: 4px; }
+        .user-message { align-self: flex-end; background-color: var(--color-gold); color: #000; border-bottom-right-radius: 4px; }
+
+        .chat-input-area {
+            padding: 1rem; flex-shrink: 0; border-top: 1px solid #444;
+            background-color: #111;
+        }
+        
+        /* --- Contenedor del Input con Marco Futurista --- */
+        .input-frame {
+            position: relative;
+            padding: 2px; /* Grosor del borde */
+            background: linear-gradient(135deg, var(--color-gold), #555);
+            clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%);
+        }
+        .input-frame-inner {
+            background-color: #111;
+            padding: 0.5rem;
+            clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%);
+            display: flex; align-items: center;
+        }
+        
+        .input-frame-inner input {
+            flex-grow: 1; border: none; background: transparent; padding: 0.5rem;
+            color: #fff; font-size: 1rem; font-family: var(--font-primary);
+        }
+        .input-frame-inner input:focus { outline: none; }
+        .input-frame-inner button {
+            background-color: transparent; border: none; cursor: pointer;
+            padding: 0.5rem; display: flex; align-items: center; justify-content: center;
+        }
+        .input-frame-inner button svg { width: 24px; height: 24px; fill: var(--color-gold); }
     </style>
 </head>
 <body>
 
     <div class="background-image"></div>
-
+    
     <header class="header">
         <div class="logo">Terranova Luxury Homes</div>
     </header>
@@ -119,14 +172,97 @@
     <div class="main-content">
         <div class="text-container">
             <h1>Esta es una empresa ficticia</h1>
-            <p>Esta página fue creada con el fin de que usted pueda ver cómo funciona un agente virtual, integrando inteligencia artificial con nuestra base de conocimiento (RAG).</p>
+            <p>Esta página fue creada para que pueda ver cómo funciona un agente virtual, integrando inteligencia artificial con nuestra base de conocimiento (RAG).</p>
+        </div>
+        <div class="action-button-container">
+            <button class="call-to-action" id="open-chat-main">Hablar con el Agente</button>
         </div>
     </div>
 
-    <div class="demo-buttons">
-        <a href="https://t.me/SageIA_bot" target="_blank" class="demo-circle" title="Probar en Telegram">✈️</a>
-        <a href="chat.html" class="demo-circle" title="Probar en la Web">🤖</a>
+    <div class="social-buttons" id="social-buttons">
+        <a href="https://t.me/SageIA_bot" target="_blank" class="social-circle" title="Probar en Telegram">
+            <svg viewBox="0 0 24 24"><path d="M11.944,0A12,12,0,0,0,0,12a12,12,0,0,0,12,12,12,12,0,0,0,12-12A12,12,0,0,0,12,0Zm5.436,8.256a.72.72,0,0,1,.24,1.152,4.8,4.8,0,0,1-.864,1.008c-1.3,1.164-2.6,2.328-3.912,3.48a.423.423,0,0,1-.66.012c-.228-.216-.456-.432-.684-.648a.336.336,0,0,1-.024-.516c.216-.252.432-.504.648-.756l.12-.144.252-.3.444-.516.108-.132,1.3-1.428,2.7-2.952,1-1.092a.264.264,0,0,1,.336-.048.276.276,0,0,1,.12.3Z" transform="translate(0.056)"/></svg>
+        </a>
     </div>
 
+    <div id="chat-widget">
+        <div class="chat-bubble-button" id="chat-bubble-button">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2a14 14 0 0 0-14 14v8a2 2 0 0 0 2 2h4v4l4.4-4H28a2 2 0 0 0 2-2v-8A14 14 0 0 0 16 2zm10 20h-7.6l-4 4H14v-4H6v-6a12 12 0 0 1 24 0v6z"/></svg>
+        </div>
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">Asistente Virtual de Terranova</div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <form class="input-frame" id="chat-form">
+                    <div class="input-frame-inner">
+                        <input type="text" id="user-input" placeholder="Pregunte por nuestras propiedades..." autocomplete="off" required>
+                        <button id="send-button" title="Enviar mensaje">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
+
+        const openChatMainBtn = document.getElementById('open-chat-main');
+        const chatWidget = document.getElementById('chat-widget');
+        const chatBubbleBtn = document.getElementById('chat-bubble-button');
+        const socialButtons = document.getElementById('social-buttons');
+
+        function toggleChat(forceOpen = false) {
+            if (forceOpen) {
+                chatWidget.classList.add('active');
+                socialButtons.style.display = 'none'; // Ocultar botones sociales al abrir
+            } else {
+                chatWidget.classList.toggle('active');
+                socialButtons.style.display = chatWidget.classList.contains('active') ? 'none' : 'flex';
+            }
+        }
+
+        openChatMainBtn.addEventListener('click', () => toggleChat(true));
+        chatBubbleBtn.addEventListener('click', () => toggleChat());
+        
+        // --- Lógica del Chat ---
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const chatForm = document.getElementById('chat-form');
+        
+        function addMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${sender}-message`);
+            messageElement.textContent = text;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const messageText = userInput.value.trim();
+            if (messageText === '') return;
+            addMessage(messageText, 'user');
+            userInput.value = '';
+            
+            try {
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: messageText })
+                });
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                const data = await response.json();
+                addMessage(data.reply || 'No he recibido una respuesta válida.', 'bot');
+            } catch (error) {
+                console.error('Fallo la comunicación con n8n:', error);
+                addMessage('Lo siento, ocurrió un error de conexión.', 'bot');
+            }
+        }
+        
+        chatForm.addEventListener('submit', handleFormSubmit);
+        addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
+    </script>
 </body>
 </html>
