@@ -191,6 +191,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.35 3.45 16.86L2.05 22L7.31 20.6C8.75 21.41 10.36 21.85 12.04 21.85C17.5 21.85 21.95 17.4 21.95 11.94C21.95 6.48 17.5 2 12.04 2M12.04 3.64C16.57 3.64 20.29 7.36 20.29 11.89C20.29 16.42 16.57 20.14 12.04 20.14C10.46 20.14 8.95 19.73 7.64 19L7.22 18.75L4.41 19.58L5.27 16.87L5 16.44C4.22 15.06 3.79 13.5 3.79 11.91C3.79 7.38 7.51 3.64 12.04 3.64M9.13 8.26C8.93 8.26 8.76 8.28 8.61 8.54C8.46 8.8 8.03 9.73 8.03 10.89C8.03 12.05 8.63 13.12 8.78 13.3C8.93 13.47 10.15 15.22 11.95 15.93C13.41 16.53 13.81 16.42 14.12 16.38C14.63 16.3 15.24 15.75 15.46 15.15C15.68 14.55 15.68 14.04 15.6 13.9C15.52 13.77 15.37 13.71 15.12 13.59C14.87 13.47 13.8 12.96 13.58 12.88C13.36 12.8 13.21 12.74 13.06 12.99C12.91 13.24 12.5 13.75 12.38 13.89C12.26 14.03 12.14 14.04 11.91 13.96C11.45 13.8 10.6 13.54 9.61 12.63C8.81 11.91 8.31 11.03 8.19 10.81C8.07 10.59 8.2 10.45 8.31 10.33C8.41 10.23 8.54 10.06 8.66 9.92C8.78 9.78 8.83 9.68 8.91 9.52C8.99 9.36 8.94 9.24 8.88 9.12C8.82 9 8.31 7.76 8.11 7.26Z" /></svg>
             <span>Contáctame</span>
         </a>
+    </div>
     
     <div class="action-bubbles" id="action-bubbles">
         <a href="https://t.me/SageIA_bot" target="_blank" class="action-circle" title="Probar en Telegram">
@@ -258,6 +259,21 @@
         const userInput = document.getElementById('user-input');
         const chatForm = document.getElementById('chat-form');
         
+        // --- AÑADIDO: Lógica para gestionar el Session ID ---
+        let sessionId = '';
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            // Usamos sessionStorage para que la memoria se reinicie al cerrar la pestaña
+            let existingSessionId = sessionStorage.getItem('terranovaChatSessionId');
+            if (existingSessionId) {
+                sessionId = existingSessionId;
+            } else {
+                sessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+                sessionStorage.setItem('terranovaChatSessionId', sessionId);
+            }
+        });
+        // --- FIN DE LA SECCIÓN AÑADIDA ---
+
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
@@ -277,7 +293,11 @@
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: messageText })
+                    // --- AÑADIDO: Enviamos el sessionId en el body ---
+                    body: JSON.stringify({ 
+                        message: messageText,
+                        sessionId: sessionId // Se añade el ID de sesión a la petición
+                    })
                 });
                 if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                 const data = await response.json();
