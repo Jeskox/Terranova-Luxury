@@ -40,7 +40,7 @@
         /* --- MODIFICADO: Tamaño del logo reducido --- */
         .logo {
             font-family: 'Angelica', var(--font-logo);
-            font-size: 2.8rem; /* Reducido desde 3.5rem */
+            font-size: 2.8rem; /* Reducido */
             font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
             color: var(--color-gold); text-shadow: 0 0 15px rgba(154, 139, 79, 0.4);
             margin: 0;
@@ -59,10 +59,11 @@
             position: relative; z-index: 5;
         }
         .text-container { max-width: 600px; text-align: left; }
-
+        
         /* --- MODIFICADO: Tamaño del h1 reducido --- */
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 3.5rem; /* Reducido desde 3.8rem */
+            font-family: var(--font-headline);
+            font-size: 3.5rem; /* Reducido */
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
@@ -234,39 +235,20 @@
     </div>
 
     <script>
-        // --- INICIO DEL SCRIPT MODIFICADO ---
-
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
 
-        // --- 1. Declaraciones de todos los elementos del DOM ---
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
         const minimizeBtn = document.getElementById('minimize-chat-btn');
         const closeBtn = document.getElementById('close-chat-btn');
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const chatForm = document.getElementById('chat-form');
         
-        // --- 2. Lógica de Session ID ---
-        // Función dedicada para obtener o crear el ID de sesión. Es más robusta.
-        function getSessionId() {
-            let currentSessionId = sessionStorage.getItem('terranovaChatSessionId');
-            if (!currentSessionId) {
-                currentSessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-                sessionStorage.setItem('terranovaChatSessionId', currentSessionId);
-            }
-            return currentSessionId;
-        }
-
-        // --- 3. Funciones de la Interfaz de Usuario (UI) ---
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
-        
         function resetChat() {
             closeChat();
-            // Borramos el ID de la sesión actual al cerrar.
+            // --- AÑADIDO: Borramos el ID de sesión al resetear ---
             sessionStorage.removeItem('terranovaChatSessionId');
             setTimeout(() => {
                 chatMessages.innerHTML = '';
@@ -274,7 +256,15 @@
             }, 400); 
         }
 
-        // --- 4. Funciones del Chat ---
+        openChatMainBtn.addEventListener('click', openChat);
+        chatBubbleBtn.addEventListener('click', toggleChat);
+        minimizeBtn.addEventListener('click', closeChat);
+        closeBtn.addEventListener('click', resetChat);
+        
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const chatForm = document.getElementById('chat-form');
+        
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
@@ -287,20 +277,24 @@
             event.preventDefault();
             const messageText = userInput.value.trim();
             if (messageText === '') return;
-            
             addMessage(messageText, 'user');
             userInput.value = '';
             
             try {
-                // Obtenemos el ID de sesión justo antes de realizar la petición.
-                const sessionId = getSessionId();
-                
+                // --- AÑADIDO: Obtenemos el ID de sesión justo antes de enviar ---
+                let sessionId = sessionStorage.getItem('terranovaChatSessionId');
+                if (!sessionId) {
+                    sessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+                    sessionStorage.setItem('terranovaChatSessionId', sessionId);
+                }
+
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    // --- MODIFICADO: Añadimos el sessionId al body ---
                     body: JSON.stringify({ 
                         message: messageText,
-                        sessionId: sessionId // Se añade el ID de sesión a la petición.
+                        sessionId: sessionId
                     })
                 });
                 if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
@@ -312,17 +306,8 @@
             }
         }
         
-        // --- 5. Asignación de Eventos ---
-        openChatMainBtn.addEventListener('click', openChat);
-        chatBubbleBtn.addEventListener('click', toggleChat);
-        minimizeBtn.addEventListener('click', closeChat);
-        closeBtn.addEventListener('click', resetChat);
         chatForm.addEventListener('submit', handleFormSubmit);
-        
-        // --- 6. Mensaje de bienvenida inicial ---
         addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
-        
-        // --- FIN DEL SCRIPT MODIFICADO ---
     </script>
 </body>
 </html>
