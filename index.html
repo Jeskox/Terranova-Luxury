@@ -25,7 +25,8 @@
 
         .background-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('background.jpg');
+            /* === URL DE IMAGEN VERIFICADA Y ESTABLE === */
+            background-image: url('https://i.imgur.com/uRPL71t.jpeg');
             background-size: cover; background-position: center;
             filter: brightness(0.4) saturate(0.8); z-index: -1;
         }
@@ -66,9 +67,12 @@
             box-shadow: 0 0 20px rgba(154, 139, 79, 0.5);
         }
 
+        /* --- Contenedor para las DOS burbujas --- */
         .action-bubbles {
             position: fixed; bottom: 3rem; right: 4rem;
-            display: flex; gap: 1rem; z-index: 5;
+            display: flex; flex-direction: column; /* Apiladas verticalmente */
+            gap: 1rem; z-index: 5;
+            align-items: center;
         }
         .action-circle {
             width: 60px; height: 60px; border-radius: 50%;
@@ -82,15 +86,12 @@
         .action-circle:hover svg { fill: var(--color-gold); }
 
         /* --- Estilos del Chat Modal --- */
-        #chat-widget { display: block; }
+        #chat-widget { display: block; } /* Siempre visible para que la lógica funcione */
         .chat-window {
-            position: fixed; bottom: 100px; right: 4rem; width: 400px; height: 70vh;
-            max-height: 600px;
-            /* Efecto Glassmorphism */
+            position: fixed; bottom: 3rem; right: calc(4rem + 60px + 1rem); /* Posicionado a la izquierda de las burbujas */
+            width: 400px; height: 70vh; max-height: 600px;
             background-color: rgba(12, 10, 9, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* Para Safari */
-            
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border-radius: 15px; z-index: 999; overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; flex-direction: column;
@@ -119,7 +120,6 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background-color: rgba(0,0,0,0.2);
         }
-        
         .input-frame {
             position: relative; padding: 2px;
             background: linear-gradient(135deg, var(--color-gold), #444);
@@ -130,10 +130,7 @@
             clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%);
             display: flex; align-items: center;
         }
-        .input-frame-inner input {
-            flex-grow: 1; border: none; background: transparent; padding: 0.5rem;
-            color: #fff; font-size: 1rem; font-family: var(--font-body);
-        }
+        .input-frame-inner input { flex-grow: 1; border: none; background: transparent; padding: 0.5rem; color: #fff; font-size: 1rem; font-family: var(--font-body); }
         .input-frame-inner input:focus { outline: none; }
         .input-frame-inner button { background: transparent; border: none; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
         .input-frame-inner button svg { width: 24px; height: 24px; fill: var(--color-gold); }
@@ -201,7 +198,6 @@
         openChatMainBtn.addEventListener('click', toggleChat);
         chatBubbleBtn.addEventListener('click', toggleChat);
         
-        // --- Lógica del Chat ---
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
         const chatForm = document.getElementById('chat-form');
