@@ -6,23 +6,21 @@
     <title>Terranova Luxury Homes - Demo IA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --font-primary: 'Montserrat', sans-serif;
-            --font-luxury: 'Cormorant Garamond', serif;
-            --color-gold: #D4AF37; /* Tono dorado premium */
+            --font-logo: 'Cormorant Garamond', serif;
+            --font-headline: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --color-gold: #9A8B4F; /* Dorado verdoso oscuro */
+            --color-text: #F3F4F6; /* Blanco roto */
+            --color-text-muted: #d1d5db;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: var(--font-primary);
-            color: #fff;
-            background-color: #000;
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; font-family: var(--font-body);
+            color: var(--color-text); background-color: #000;
         }
 
         .background-image {
@@ -38,12 +36,11 @@
             box-sizing: border-box; z-index: 10;
         }
         .logo {
-            font-family: var(--font-luxury);
-            font-size: 2rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--color-gold);
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            font-family: var(--font-logo); font-size: 2rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px;
+            color: var(--color-gold); text-shadow: 0 0 15px rgba(154, 139, 79, 0.4);
         }
+        .header-icon svg { width: 32px; height: 32px; fill: var(--color-text-muted); }
 
         .main-content {
             display: flex; align-items: center; justify-content: space-between;
@@ -51,113 +48,94 @@
             position: relative; z-index: 5;
         }
         .text-container { max-width: 600px; text-align: left; }
-        .text-container h1 { font-size: 3.5rem; font-weight: 700; margin: 0 0 1rem 0; font-family: var(--font-primary);}
-        .text-container p { font-size: 1.2rem; color: #d1d5db; line-height: 1.6; }
-        
-        .action-button-container {
-            padding-right: 4rem;
+        .text-container h1 {
+            font-family: var(--font-headline); font-size: 4rem; font-weight: 500;
+            margin: 0 0 1rem 0; color: var(--color-text);
         }
+        .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
+        
+        .action-button-container { padding-right: 4rem; }
         .call-to-action {
-            background-color: transparent;
-            border: 2px solid var(--color-gold);
-            color: var(--color-gold);
-            padding: 1rem 2.5rem;
-            font-family: var(--font-primary);
-            font-size: 1.1rem;
-            font-weight: 500;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-color: transparent; border: 2px solid var(--color-gold);
+            color: var(--color-gold); padding: 1rem 2.5rem;
+            font-family: var(--font-body); font-size: 1.1rem; font-weight: 500;
+            border-radius: 50px; cursor: pointer; transition: all 0.3s ease;
         }
         .call-to-action:hover {
-            background-color: var(--color-gold);
-            color: #000;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            background-color: var(--color-gold); color: #000;
+            box-shadow: 0 0 20px rgba(154, 139, 79, 0.5);
         }
 
-        .social-buttons {
-            position: absolute; bottom: 3rem; right: 4rem; /* Cambiado a la derecha */
-            display: flex; gap: 1.5rem; z-index: 5;
+        .action-bubbles {
+            position: fixed; bottom: 3rem; right: 4rem;
+            display: flex; gap: 1rem; z-index: 5;
         }
-        .social-circle {
+        .action-circle {
             width: 60px; height: 60px; border-radius: 50%;
             background-color: rgba(0, 0, 0, 0.5); border: 1px solid #444;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; color: #fff; cursor: pointer;
             transition: all 0.3s ease;
         }
-        .social-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; }
-        .social-circle:hover { border-color: var(--color-gold); }
-        .social-circle:hover svg { fill: var(--color-gold); }
+        .action-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; }
+        .action-circle:hover { border-color: var(--color-gold); }
+        .action-circle:hover svg { fill: var(--color-gold); }
 
         /* --- Estilos del Chat Modal --- */
-        #chat-widget { display: none; } /* Oculto por defecto */
-        #chat-widget.active { display: block; }
-
-        .chat-bubble-button {
-            position: fixed; bottom: 3rem; right: 4rem; width: 60px; height: 60px;
-            background-color: #000; border-radius: 50%; z-index: 1000;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 2px solid var(--color-gold);
-        }
-        .chat-bubble-button svg { width: 28px; height: 28px; fill: var(--color-gold); }
-
+        #chat-widget { display: block; }
         .chat-window {
             position: fixed; bottom: 100px; right: 4rem; width: 400px; height: 70vh;
-            max-height: 600px; background-color: #0c0a09; border-radius: 15px;
-            z-index: 999; overflow: hidden;
-            border: 1px solid #444; display: flex; flex-direction: column;
+            max-height: 600px;
+            /* Efecto Glassmorphism */
+            background-color: rgba(12, 10, 9, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Para Safari */
+            
+            border-radius: 15px; z-index: 999; overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; flex-direction: column;
             opacity: 0; transform: translateY(20px);
             transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
         }
-        #chat-widget.active .chat-window { opacity: 1; transform: translateY(0); }
+        #chat-widget.active .chat-window { opacity: 1; transform: translateY(0); pointer-events: auto; }
         
         .chat-header {
             padding: 1.2rem; text-align: center; font-weight: 500;
             color: var(--color-gold); flex-shrink: 0;
-            border-bottom: 1px solid #444; background-color: #111;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0,0,0,0.2);
         }
 
-        .chat-messages {
-            flex-grow: 1; padding: 1.5rem; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 1.5rem;
-        }
+        .chat-messages { flex-grow: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
         .chat-messages::-webkit-scrollbar { width: 6px; }
         .chat-messages::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-
         .message { max-width: 80%; line-height: 1.6; font-size: 0.95rem; padding: 0.8rem 1.2rem; border-radius: 18px; }
-        .bot-message { align-self: flex-start; background-color: #222; border-bottom-left-radius: 4px; }
+        .bot-message { align-self: flex-start; background-color: rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
         .user-message { align-self: flex-end; background-color: var(--color-gold); color: #000; border-bottom-right-radius: 4px; }
 
         .chat-input-area {
-            padding: 1rem; flex-shrink: 0; border-top: 1px solid #444;
-            background-color: #111;
+            padding: 1rem; flex-shrink: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0,0,0,0.2);
         }
         
-        /* --- Contenedor del Input con Marco Futurista --- */
         .input-frame {
-            position: relative;
-            padding: 2px; /* Grosor del borde */
-            background: linear-gradient(135deg, var(--color-gold), #555);
+            position: relative; padding: 2px;
+            background: linear-gradient(135deg, var(--color-gold), #444);
             clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%);
         }
         .input-frame-inner {
-            background-color: #111;
-            padding: 0.5rem;
+            background-color: #111; padding: 0.5rem;
             clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%);
             display: flex; align-items: center;
         }
-        
         .input-frame-inner input {
             flex-grow: 1; border: none; background: transparent; padding: 0.5rem;
-            color: #fff; font-size: 1rem; font-family: var(--font-primary);
+            color: #fff; font-size: 1rem; font-family: var(--font-body);
         }
         .input-frame-inner input:focus { outline: none; }
-        .input-frame-inner button {
-            background-color: transparent; border: none; cursor: pointer;
-            padding: 0.5rem; display: flex; align-items: center; justify-content: center;
-        }
+        .input-frame-inner button { background: transparent; border: none; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
         .input-frame-inner button svg { width: 24px; height: 24px; fill: var(--color-gold); }
     </style>
 </head>
@@ -167,6 +145,9 @@
     
     <header class="header">
         <div class="logo">Terranova Luxury Homes</div>
+        <div class="header-icon" title="Inicio">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" /></svg>
+        </div>
     </header>
 
     <div class="main-content">
@@ -179,16 +160,16 @@
         </div>
     </div>
 
-    <div class="social-buttons" id="social-buttons">
-        <a href="https://t.me/SageIA_bot" target="_blank" class="social-circle" title="Probar en Telegram">
-            <svg viewBox="0 0 24 24"><path d="M11.944,0A12,12,0,0,0,0,12a12,12,0,0,0,12,12,12,12,0,0,0,12-12A12,12,0,0,0,12,0Zm5.436,8.256a.72.72,0,0,1,.24,1.152,4.8,4.8,0,0,1-.864,1.008c-1.3,1.164-2.6,2.328-3.912,3.48a.423.423,0,0,1-.66.012c-.228-.216-.456-.432-.684-.648a.336.336,0,0,1-.024-.516c.216-.252.432-.504.648-.756l.12-.144.252-.3.444-.516.108-.132,1.3-1.428,2.7-2.952,1-1.092a.264.264,0,0,1,.336-.048.276.276,0,0,1,.12.3Z" transform="translate(0.056)"/></svg>
+    <div class="action-bubbles" id="action-bubbles">
+        <a href="https://t.me/SageIA_bot" target="_blank" class="action-circle" title="Probar en Telegram">
+            <svg viewBox="0 0 24 24"><path d="M11.944,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,11.944,0ZM18,7.4,15.2,18.21a.84.84,0,0,1-1.24.52L9.8,15.75,8.13,17.36a.42.42,0,0,1-.52.06L7.2,16.89a.42.42,0,0,1-.06-.52L8.6,14.7l-4.52-1.4a.84.84,0,0,1-.04-1.57L17,6.33a.84.84,0,0,1,1.15.24A.82.82,0,0,1,18,7.4Z"/></svg>
         </a>
+        <div class="action-circle" id="chat-bubble-button" title="Abrir Chat Web">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.2L4 17.2V4H20V16Z"/></svg>
+        </div>
     </div>
 
     <div id="chat-widget">
-        <div class="chat-bubble-button" id="chat-bubble-button">
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2a14 14 0 0 0-14 14v8a2 2 0 0 0 2 2h4v4l4.4-4H28a2 2 0 0 0 2-2v-8A14 14 0 0 0 16 2zm10 20h-7.6l-4 4H14v-4H6v-6a12 12 0 0 1 24 0v6z"/></svg>
-        </div>
         <div class="chat-window" id="chat-window">
             <div class="chat-header">Asistente Virtual de Terranova</div>
             <div class="chat-messages" id="chat-messages"></div>
@@ -211,20 +192,14 @@
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
-        const socialButtons = document.getElementById('social-buttons');
+        const actionBubbles = document.getElementById('action-bubbles');
 
-        function toggleChat(forceOpen = false) {
-            if (forceOpen) {
-                chatWidget.classList.add('active');
-                socialButtons.style.display = 'none'; // Ocultar botones sociales al abrir
-            } else {
-                chatWidget.classList.toggle('active');
-                socialButtons.style.display = chatWidget.classList.contains('active') ? 'none' : 'flex';
-            }
+        function toggleChat() {
+            chatWidget.classList.toggle('active');
         }
 
-        openChatMainBtn.addEventListener('click', () => toggleChat(true));
-        chatBubbleBtn.addEventListener('click', () => toggleChat());
+        openChatMainBtn.addEventListener('click', toggleChat);
+        chatBubbleBtn.addEventListener('click', toggleChat);
         
         // --- Lógica del Chat ---
         const chatMessages = document.getElementById('chat-messages');
