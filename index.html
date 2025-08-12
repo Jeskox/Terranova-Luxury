@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
     <style>
+        /* [ TU CSS COMPLETO E INTACTO VA AQUÍ ] */
         :root {
             --font-logo: 'Cormorant Garamond', serif;
             --font-headline: 'Playfair Display', serif;
@@ -232,18 +233,38 @@
 
     <script>
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
-
+        
+        // --- Declaraciones de Elementos del DOM ---
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
         const minimizeBtn = document.getElementById('minimize-chat-btn');
         const closeBtn = document.getElementById('close-chat-btn');
-        
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const chatForm = document.getElementById('chat-form');
+
+        // --- AÑADIDO: Función a prueba de fallos para obtener/crear el Session ID ---
+        function getSessionId() {
+            let currentSessionId = sessionStorage.getItem('terranovaChatSessionId');
+            if (!currentSessionId) {
+                currentSessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+                sessionStorage.setItem('terranovaChatSessionId', currentSessionId);
+                console.log('[DEBUG] Nueva Sesión Creada:', currentSessionId);
+            }
+            return currentSessionId;
+        }
+        // --- FIN DE LA SECCIÓN AÑADIDA ---
+
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
+        
         function resetChat() {
             closeChat();
+            // --- AÑADIDO: Borramos el ID de sesión al resetear ---
+            sessionStorage.removeItem('terranovaChatSessionId');
+            // --- FIN DE LA SECCIÓN AÑADIDA ---
             setTimeout(() => {
                 chatMessages.innerHTML = '';
                 addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
@@ -255,25 +276,6 @@
         minimizeBtn.addEventListener('click', closeChat);
         closeBtn.addEventListener('click', resetChat);
         
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const chatForm = document.getElementById('chat-form');
-        
-        // --- AÑADIDO: Lógica para gestionar el Session ID ---
-        let sessionId = '';
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            // Usamos sessionStorage para que la memoria se reinicie al cerrar la pestaña
-            let existingSessionId = sessionStorage.getItem('terranovaChatSessionId');
-            if (existingSessionId) {
-                sessionId = existingSessionId;
-            } else {
-                sessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-                sessionStorage.setItem('terranovaChatSessionId', sessionId);
-            }
-        });
-        // --- FIN DE LA SECCIÓN AÑADIDA ---
-
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
@@ -290,10 +292,15 @@
             userInput.value = '';
             
             try {
+                // --- AÑADIDO: Obtenemos el ID de sesión justo antes de enviar ---
+                const sessionId = getSessionId();
+                console.log('[DEBUG] Enviando mensaje con Session ID:', sessionId);
+                // --- FIN DE LA SECCIÓN AÑADIDA ---
+
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // --- AÑADIDO: Enviamos el sessionId en el body ---
+                    // --- MODIFICADO: Añadimos el sessionId al body ---
                     body: JSON.stringify({ 
                         message: messageText,
                         sessionId: sessionId // Se añade el ID de sesión a la petición
