@@ -6,17 +6,17 @@
     <title>Terranova Luxury Homes - Demo IA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --font-logo: 'Cormorant Garamond', serif;
             --font-headline: 'Playfair Display', serif;
             --font-body: 'Montserrat', sans-serif;
-            --color-gold: #9A8B4F; /* Dorado verdoso oscuro */
-            --color-text: #F3F4F6; /* Blanco roto */
+            --color-gold: #9A8B4F;
+            --color-text: #F3F4F6;
             --color-text-muted: #d1d5db;
-            --color-glass-green: rgba(60, 75, 50, 0.55); /* Más translúcido */
-            --color-glass-header: rgba(10, 15, 8, 0.85); /* Más intenso */
+            --color-glass-green: rgba(60, 75, 50, 0.45); /* MÁS transparente */
+            --color-glass-header: rgba(10, 15, 8, 0.85);
         }
 
         body, html {
@@ -34,22 +34,23 @@
 
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 2rem 4rem; position: fixed; width: 100%; top: 0;
+            padding: 2.5rem 4rem; position: fixed; width: 100%; top: 0;
             box-sizing: border-box; z-index: 10;
         }
         .logo-container { text-align: left; }
         .logo {
-            font-family: var(--font-logo); font-size: 2rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px;
+            font-family: var(--font-logo); font-size: 2.5rem; /* Más grande */
+            font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
             color: var(--color-gold); text-shadow: 0 0 15px rgba(154, 139, 79, 0.4);
             margin: 0;
         }
         .slogan { 
             font-size: 0.9rem; color: var(--color-text-muted); 
-            margin: 0; letter-spacing: 1px;
+            margin-top: 0.5rem; /* Separación */
+            letter-spacing: 1px;
         }
         .header-home { display: flex; align-items: center; gap: 0.75rem; color: var(--color-text-muted); }
-        .header-home svg { width: 32px; height: 32px; fill: var(--color-text-muted); }
+        .header-home svg { width: 28px; height: 28px; stroke: var(--color-text-muted); stroke-width: 1.5; }
         .header-home span { font-size: 1.1rem; font-weight: 500; }
 
         .main-content {
@@ -59,8 +60,9 @@
         }
         .text-container { max-width: 600px; text-align: left; }
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 3.2rem; /* Tamaño reducido */
+            font-family: var(--font-headline); font-size: 1.1rem; /* Tamaño reducido */
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
+            text-transform: uppercase; letter-spacing: 1px;
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
         .example-list { list-style-type: none; padding-left: 0; margin-top: 1.5rem; color: #a1a1aa; }
@@ -75,8 +77,14 @@
         }
         .call-to-action:hover { background-color: var(--color-gold); color: #000; box-shadow: 0 0 20px rgba(154, 139, 79, 0.5); }
         
-        .contact-link {
+        .contact-area {
             position: fixed; bottom: 3rem; left: 4rem; z-index: 5;
+            text-align: left;
+        }
+        .contact-area p {
+            margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--color-text-muted);
+        }
+        .contact-link {
             display: flex; align-items: center; gap: 0.75rem;
             text-decoration: none; color: var(--color-text-muted); transition: color 0.3s;
         }
@@ -86,21 +94,17 @@
 
         .action-bubbles {
             position: fixed; bottom: 3rem; right: 4rem;
-            display: flex; flex-direction: column; gap: 1rem; z-index: 5;
-            align-items: flex-end; /* Alinear a la derecha */
+            display: flex; gap: 1rem; z-index: 5; align-items: center;
         }
         .action-circle {
-            height: 60px; border-radius: 30px; /* Radio para que sea píldora */
+            width: 60px; height: 60px; border-radius: 50px;
             background-color: rgba(0, 0, 0, 0.5); border: 1px solid #444;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; cursor: pointer; transition: all 0.3s ease;
-            padding: 0 1rem; /* Padding para acomodar texto */
         }
-        .action-circle.icon-only { width: 60px; padding: 0; }
-        .action-circle span { color: #fff; font-weight: 500; margin-right: 0.5rem; }
-        .action-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; flex-shrink: 0; }
+        .action-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; }
         .action-circle:hover { border-color: var(--color-gold); }
-        .action-circle:hover svg, .action-circle:hover span { color: var(--color-gold); fill: var(--color-gold); }
+        .action-circle:hover svg { fill: var(--color-gold); }
 
         /* --- Estilos del Chat Modal --- */
         #chat-widget { display: block; }
@@ -120,8 +124,9 @@
         #chat-widget.active .chat-window { opacity: 1; transform: scale(1); pointer-events: auto; }
         
         .chat-header {
-            padding: 1rem 1.5rem; text-align: center; font-weight: 500;
-            color: var(--color-gold); flex-shrink: 0; position: relative;
+            padding: 1rem 1.5rem; text-align: left; /* Alineado a la izquierda */
+            font-weight: 500; color: var(--color-gold); 
+            flex-shrink: 0; position: relative;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background-color: var(--color-glass-header);
         }
@@ -134,7 +139,7 @@
         .chat-messages::-webkit-scrollbar { width: 6px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         .message { max-width: 80%; line-height: 1.6; font-size: 0.95rem; padding: 0.8rem 1.2rem; border-radius: 18px; }
-        .bot-message { align-self: flex-start; background-color: rgba(0,0,0,0.3); border-bottom-left-radius: 4px; }
+        .bot-message { align-self: flex-start; background-color: rgba(0,0,0,0.4); border-bottom-left-radius: 4px; }
         .user-message { align-self: flex-end; background-color: var(--color-gold); color: #000; font-weight: 500; border-bottom-right-radius: 4px; }
 
         .chat-input-area { padding: 1rem; flex-shrink: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--color-glass-header); }
@@ -156,15 +161,17 @@
             <p class="slogan">Venta de propiedades de lujo en el Perú y en el extranjero</p>
         </div>
         <div class="header-home" title="Inicio">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,3L2,12H5V20H19V12H22L12,3Z" /></svg>
             <span>Home</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
+            </svg>
         </div>
     </header>
 
     <div class="main-content">
         <div class="text-container">
             <h1>Esta es una empresa ficticia</h1>
-            <p>Esta página fue creada para que pueda ver cómo funciona un agente virtual, integrando inteligencia artificial con nuestra base de conocimiento (RAG).</p>
+            <p>Esta página fue creada con el fin de que usted pueda ver y probar la integración de un asistente virtual a la web.</p>
             <ul class="example-list">
                 <li>Pruebe a chatear con el agente. Ejemplos:</li>
                 <li>- ¿Qué tipo de servicios ofrece?</li>
@@ -177,14 +184,15 @@
         </div>
     </div>
     
-    <a href="https://wa.me/51992254495?text=Hola,%20quisiera%20contactar." target="_blank" class="contact-link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.35 3.45 16.86L2.05 22L7.31 20.6C8.75 21.41 10.36 21.85 12.04 21.85C17.5 21.85 21.95 17.4 21.95 11.94C21.95 6.48 17.5 2 12.04 2M12.04 3.64C16.57 3.64 20.29 7.36 20.29 11.89C20.29 16.42 16.57 20.14 12.04 20.14C10.46 20.14 8.95 19.73 7.64 19L7.22 18.75L4.41 19.58L5.27 16.87L5 16.44C4.22 15.06 3.79 13.5 3.79 11.91C3.79 7.38 7.51 3.64 12.04 3.64M9.13 8.26C8.93 8.26 8.76 8.28 8.61 8.54C8.46 8.8 8.03 9.73 8.03 10.89C8.03 12.05 8.63 13.12 8.78 13.3C8.93 13.47 10.15 15.22 11.95 15.93C13.41 16.53 13.81 16.42 14.12 16.38C14.63 16.3 15.24 15.75 15.46 15.15C15.68 14.55 15.68 14.04 15.6 13.9C15.52 13.77 15.37 13.71 15.12 13.59C14.87 13.47 13.8 12.96 13.58 12.88C13.36 12.8 13.21 12.74 13.06 12.99C12.91 13.24 12.5 13.75 12.38 13.89C12.26 14.03 12.14 14.04 11.91 13.96C11.45 13.8 10.6 13.54 9.61 12.63C8.81 11.91 8.31 11.03 8.19 10.81C8.07 10.59 8.2 10.45 8.31 10.33C8.41 10.23 8.54 10.06 8.66 9.92C8.78 9.78 8.83 9.68 8.91 9.52C8.99 9.36 8.94 9.24 8.88 9.12C8.82 9 8.31 7.76 8.11 7.26Z" /></svg>
-        <span>Contáctame</span>
-    </a>
-
+    <div class="contact-area">
+        <p>¿Estas interesado?</p>
+        <a href="https://wa.me/51992254495?text=Hola,%20quisiera%20contactar." target="_blank" class="contact-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.35 3.45 16.86L2.05 22L7.31 20.6C8.75 21.41 10.36 21.85 12.04 21.85C17.5 21.85 21.95 17.4 21.95 11.94C21.95 6.48 17.5 2 12.04 2M12.04 3.64C16.57 3.64 20.29 7.36 20.29 11.89C20.29 16.42 16.57 20.14 12.04 20.14C10.46 20.14 8.95 19.73 7.64 19L7.22 18.75L4.41 19.58L5.27 16.87L5 16.44C4.22 15.06 3.79 13.5 3.79 11.91C3.79 7.38 7.51 3.64 12.04 3.64M9.13 8.26C8.93 8.26 8.76 8.28 8.61 8.54C8.46 8.8 8.03 9.73 8.03 10.89C8.03 12.05 8.63 13.12 8.78 13.3C8.93 13.47 10.15 15.22 11.95 15.93C13.41 16.53 13.81 16.42 14.12 16.38C14.63 16.3 15.24 15.75 15.46 15.15C15.68 14.55 15.68 14.04 15.6 13.9C15.52 13.77 15.37 13.71 15.12 13.59C14.87 13.47 13.8 12.96 13.58 12.88C13.36 12.8 13.21 12.74 13.06 12.99C12.91 13.24 12.5 13.75 12.38 13.89C12.26 14.03 12.14 14.04 11.91 13.96C11.45 13.8 10.6 13.54 9.61 12.63C8.81 11.91 8.31 11.03 8.19 10.81C8.07 10.59 8.2 10.45 8.31 10.33C8.41 10.23 8.54 10.06 8.66 9.92C8.78 9.78 8.83 9.68 8.91 9.52C8.99 9.36 8.94 9.24 8.88 9.12C8.82 9 8.31 7.76 8.11 7.26Z" /></svg>
+            <span>Contáctame</span>
+        </a>
+    
     <div class="action-bubbles" id="action-bubbles">
         <a href="https://t.me/SageIA_bot" target="_blank" class="action-circle" title="Probar en Telegram">
-            <span>Agente en Telegram</span>
             <svg viewBox="0 0 24 24"><path d="M11.944,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,11.944,0ZM18,7.4,15.2,18.21a.84.84,0,0,1-1.24.52L9.8,15.75,8.13,17.36a.42.42,0,0,1-.52.06L7.2,16.89a.42.42,0,0,1-.06-.52L8.6,14.7l-4.52-1.4a.84.84,0,0,1-.04-1.57L17,6.33a.84.84,0,0,1,1.15.24A.82.82,0,0,1,18,7.4Z"/></svg>
         </a>
         <div class="action-circle icon-only" id="chat-bubble-button" title="Abrir Chat Web">
@@ -195,7 +203,7 @@
     <div id="chat-widget">
         <div class="chat-window" id="chat-window">
             <div class="chat-header">
-                Sage
+                Sage / Asistente Virtual
                 <div class="chat-header-icons">
                     <button id="minimize-chat-btn" title="Minimizar">
                         <svg viewBox="0 0 24 24"><path d="M20,14H4V10H20" /></svg>
@@ -222,15 +230,12 @@
     <script>
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
 
-        // --- Elementos del DOM ---
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
-        const chatWindow = document.getElementById('chat-window');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
         const minimizeBtn = document.getElementById('minimize-chat-btn');
         const closeBtn = document.getElementById('close-chat-btn');
         
-        // --- Funciones de Control del Chat ---
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
@@ -239,15 +244,14 @@
             setTimeout(() => {
                 chatMessages.innerHTML = '';
                 addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
-            }, 300);
+            }, 400); // Sincronizar con la animación
         }
 
         openChatMainBtn.addEventListener('click', openChat);
         chatBubbleBtn.addEventListener('click', toggleChat);
-        minimizeBtn.addEventListener('click', closeChat); // Minimizar ahora simplemente cierra
+        minimizeBtn.addEventListener('click', closeChat);
         closeBtn.addEventListener('click', resetChat);
         
-        // --- Lógica del Chat ---
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
         const chatForm = document.getElementById('chat-form');
@@ -286,4 +290,4 @@
         addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
     </script>
 </body>
-</html>```
+</html>
