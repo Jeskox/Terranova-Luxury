@@ -6,7 +6,7 @@
     <title>Terranova Luxury Homes - Demo IA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@500&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --font-logo: 'Cormorant Garamond', serif;
@@ -22,15 +22,15 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: var(--font-body);
-            color: var(--color-text);
-            /* === NUEVO FONDO CREADO CON CÓDIGO CSS === */
-            background-color: #0d1117; /* Base oscura */
-            background-image: 
-                /* Reflejos de luz cálidos en la parte inferior */
-                radial-gradient(ellipse at 30% 90%, rgba(154, 139, 79, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 85%, rgba(154, 139, 79, 0.15) 0%, transparent 40%),
-                /* Gradiente de cielo de atardecer */
-                linear-gradient(to top, #1a1423 0%, #372a4b 40%, #0d1117 100%);
+            color: var(--color-text); background-color: #000;
+        }
+
+        .background-image {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            /* === ¡IMPORTANTE! PEGA AQUÍ LA URL PÚBLICA DE TU IMAGEN DE SUPABASE === */
+            background-image: url('PEGA_AQUÍ_LA_URL_DE_TU_IMAGEN_DE_SUPABASE');
+            background-size: cover; background-position: center;
+            filter: brightness(0.4) saturate(0.8); z-index: -1;
         }
 
         .header {
@@ -60,14 +60,17 @@
         }
         .text-container { max-width: 600px; text-align: left; }
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 4.2rem;
+            font-family: var(--font-headline); font-size: 3.8rem; /* Tamaño reducido */
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
         .example-list { list-style-type: none; padding-left: 0; margin-top: 1.5rem; color: #a1a1aa; }
         .example-list li { margin-bottom: 0.5rem; }
 
-        .action-button-container { padding-right: 4rem; }
+        .action-button-container {
+            padding-right: 4rem;
+            margin-top: 5rem; /* Desplazado hacia abajo */
+        }
         .call-to-action {
             background-color: transparent; border: 2px solid var(--color-gold);
             color: var(--color-gold); padding: 1rem 2.5rem;
@@ -91,16 +94,17 @@
 
         .action-bubbles {
             position: fixed; bottom: 3rem; right: 4rem;
-            display: flex; gap: 1rem; z-index: 5; align-items: center;
+            display: flex; gap: 1rem; z-index: 5; align-items: center; /* Alineación horizontal */
         }
         .action-circle {
-            width: 60px; height: 60px; border-radius: 50px;
+            height: 60px; border-radius: 30px;
             background-color: rgba(0, 0, 0, 0.5); border: 1px solid #444;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; cursor: pointer; transition: all 0.3s ease;
+            padding: 0 1.2rem; /* Padding para acomodar texto */
         }
         .action-circle.icon-only { width: 60px; padding: 0; }
-        .action-circle span { color: #fff; font-weight: 500; margin-right: 0.5rem; }
+        .action-circle span { color: #fff; font-weight: 500; margin-right: 0.75rem; }
         .action-circle svg { width: 32px; height: 32px; fill: #fff; transition: fill 0.3s; flex-shrink: 0; }
         .action-circle:hover { border-color: var(--color-gold); }
         .action-circle:hover svg, .action-circle:hover span { color: var(--color-gold); fill: var(--color-gold); }
@@ -124,7 +128,9 @@
         
         .chat-header {
             padding: 1rem 1.5rem; text-align: left;
-            font-weight: 500; color: var(--color-gold); 
+            font-weight: 600; /* Resaltado */
+            color: var(--color-gold); 
+            text-shadow: 0 0 5px rgba(154, 139, 79, 0.5); /* Sombra sutil */
             flex-shrink: 0; position: relative;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background-color: var(--color-glass-header);
@@ -142,8 +148,19 @@
         .user-message { align-self: flex-end; background-color: var(--color-gold); color: #000; font-weight: 500; border-bottom-right-radius: 4px; }
 
         .chat-input-area { padding: 1rem; flex-shrink: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--color-glass-header); }
-        .input-frame { position: relative; padding: 2px; background: linear-gradient(135deg, var(--color-gold), #444); clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%); }
-        .input-frame-inner { background-color: #111; padding: 0.5rem; clip-path: polygon(0 10px, 10px 0, calc(100% - 35px) 0, 100% 35px, 100% 100%, 0 100%); display: flex; align-items: center; }
+        .input-frame {
+            position: relative;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--color-gold), #444);
+            clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
+        }
+        .input-frame-inner {
+            background-color: #111;
+            padding: 0.5rem;
+            clip-path: polygon(0% 12px, 12px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
+            display: flex;
+            align-items: center;
+        }
         .input-frame-inner input { flex-grow: 1; border: none; background: transparent; padding: 0.5rem; color: #fff; font-size: 1rem; font-family: var(--font-body); }
         .input-frame-inner input:focus { outline: none; }
         .input-frame-inner button { background: transparent; border: none; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
@@ -162,7 +179,7 @@
         <div class="header-home" title="Inicio">
             <span>Home</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
             </svg>
         </div>
     </header>
@@ -192,6 +209,7 @@
     
     <div class="action-bubbles" id="action-bubbles">
         <a href="https://t.me/SageIA_bot" target="_blank" class="action-circle" title="Probar en Telegram">
+            <span>Agente en Telegram</span>
             <svg viewBox="0 0 24 24"><path d="M11.944,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,11.944,0ZM18,7.4,15.2,18.21a.84.84,0,0,1-1.24.52L9.8,15.75,8.13,17.36a.42.42,0,0,1-.52.06L7.2,16.89a.42.42,0,0,1-.06-.52L8.6,14.7l-4.52-1.4a.84.84,0,0,1-.04-1.57L17,6.33a.84.84,0,0,1,1.15.24A.82.82,0,0,1,18,7.4Z"/></svg>
         </a>
         <div class="action-circle icon-only" id="chat-bubble-button" title="Abrir/Cerrar Chat Web">
