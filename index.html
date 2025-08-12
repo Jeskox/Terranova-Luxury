@@ -25,41 +25,38 @@
             color: var(--color-text);
         }
 
-        /* --- MODIFICADO: Añadimos position: relative y un color de respaldo --- */
         body {
-            position: relative; /* Necesario para que el ::before se posicione correctamente */
-            background-color: #0d1117; /* Se mostrará si la imagen no carga */
+            position: relative;
+            background-color: #0d1117;
         }
         
-        /* --- AÑADIDO: Lógica del fondo de imagen --- */
+        /* --- MODIFICADO: Opacidad del velo reducida al 20% --- */
         body::before {
             content: '';
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: -1; /* Coloca esta capa detrás de todo el contenido */
-
-            /* URL de la imagen. La ruta './images/background.jpg' es correcta para tu estructura de carpetas. */
-            /* El linear-gradient crea una capa oscura para que el texto sea legible. */
+            z-index: -1;
             background-image: 
-                linear-gradient(rgba(10, 15, 8, 0.4), rgba(10, 15, 8, 0.4)),
+                linear-gradient(rgba(10, 15, 8, 0.2), rgba(10, 15, 8, 0.2)),
                 url('./images/background.jpg');
-            
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
         }
-        /* --- FIN DE LA SECCIÓN AÑADIDA --- */
 
-
+        /* --- MODIFICADO: Padding superior reducido para mover el header hacia arriba --- */
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 2.5rem 4rem; position: fixed; width: 100%; top: 0;
+            padding: 1.5rem 4rem; position: fixed; width: 100%; top: 0;
             box-sizing: border-box; z-index: 10;
         }
         .logo-container { text-align: left; }
+        
+        /* --- MODIFICADO: Tamaño y fuente del logo --- */
         .logo {
-            font-family: var(--font-logo); font-size: 2.5rem;
+            font-family: 'Angelica', var(--font-logo); /* Cambiado a Angelica, con fallback */
+            font-size: 3.5rem; /* Aumentado desde 2.5rem */
             font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
             color: var(--color-gold); text-shadow: 0 0 15px rgba(154, 139, 79, 0.4);
             margin: 0;
@@ -78,8 +75,10 @@
             position: relative; z-index: 5;
         }
         .text-container { max-width: 600px; text-align: left; }
+        
+        /* --- MODIFICADO: Tamaño del h1 reducido --- */
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 4.2rem;
+            font-family: var(--font-headline); font-size: 3.8rem; /* Disminuido desde 4.2rem */
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
@@ -88,7 +87,7 @@
 
         .action-button-container {
             padding-right: 4rem;
-            margin-top: 7rem; /* Desplazado más abajo */
+            margin-top: 7rem;
         }
         .call-to-action {
             background-color: transparent; border: 2px solid var(--color-gold);
@@ -128,7 +127,7 @@
         .action-circle:hover { border-color: var(--color-gold); }
         .action-circle:hover svg, .action-circle:hover span { color: var(--color-gold); fill: var(--color-gold); }
 
-        /* --- Estilos del Chat Modal --- */
+        /* --- Estilos del Chat Modal (sin cambios) --- */
         #chat-widget { display: block; }
         .chat-window {
             position: fixed; bottom: 3rem; right: 4rem; 
@@ -175,9 +174,6 @@
     </style>
 </head>
 <body>
-    
-    <!-- El fondo original que usabas con degradados ha sido eliminado de la regla 'body' -->
-    <!-- y ahora se maneja con el ::before -->
     
     <header class="header">
         <div class="logo-container">
@@ -254,35 +250,50 @@
     </div>
 
     <script>
-        // Tu JavaScript original intacto
+        // --- MODIFICADO: Script completo reestructurado para ser a prueba de fallos ---
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
 
+        // Declaraciones de Elementos del DOM
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
         const minimizeBtn = document.getElementById('minimize-chat-btn');
         const closeBtn = document.getElementById('close-chat-btn');
-        
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const chatForm = document.getElementById('chat-form');
+
+        // Función a prueba de fallos para obtener/crear el Session ID
+        function getSessionId() {
+            let currentSessionId = sessionStorage.getItem('terranovaChatSessionId');
+            if (!currentSessionId) {
+                currentSessionId = `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+                sessionStorage.setItem('terranovaChatSessionId', currentSessionId);
+            }
+            return currentSessionId;
+        }
+
+        // Lógica de UI del Chat
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
+        
         function resetChat() {
             closeChat();
+            sessionStorage.removeItem('terranovaChatSessionId'); // Borramos el ID de sesión
             setTimeout(() => {
                 chatMessages.innerHTML = '';
                 addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
             }, 400); 
         }
 
+        // Event Listeners para la UI
         openChatMainBtn.addEventListener('click', openChat);
         chatBubbleBtn.addEventListener('click', toggleChat);
         minimizeBtn.addEventListener('click', closeChat);
         closeBtn.addEventListener('click', resetChat);
         
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const chatForm = document.getElementById('chat-form');
-        
+        // Función para añadir mensajes al DOM
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
@@ -291,6 +302,7 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        // Función principal para manejar el envío de mensajes
         async function handleFormSubmit(event) {
             event.preventDefault();
             const messageText = userInput.value.trim();
@@ -299,21 +311,30 @@
             userInput.value = '';
             
             try {
+                // Obtenemos el ID de sesión justo antes de enviar
+                const sessionId = getSessionId();
+                
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: messageText })
+                    body: JSON.stringify({ 
+                        message: messageText,
+                        sessionId: sessionId // Se añade el ID de sesión a la petición
+                    })
                 });
                 if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                 const data = await response.json();
                 addMessage(data.reply || 'No he recibido una respuesta válida.', 'bot');
-            } catch (error) {
+            } catch (error)
                 console.error('Fallo la comunicación con n8n:', error);
                 addMessage('Lo siento, ocurrió un error de conexión.', 'bot');
             }
         }
         
+        // Event Listener para el formulario
         chatForm.addEventListener('submit', handleFormSubmit);
+        
+        // Mensaje de bienvenida inicial
         addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
     </script>
 </body>
