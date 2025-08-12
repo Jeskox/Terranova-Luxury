@@ -23,40 +23,24 @@
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: var(--font-body);
             color: var(--color-text);
-        }
-
-        body {
-            position: relative;
             background-color: #0d1117;
-        }
-        
-        /* --- MODIFICADO: Opacidad del velo reducida al 20% --- */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
             background-image: 
-                linear-gradient(rgba(10, 15, 8, 0.2), rgba(10, 15, 8, 0.2)),
-                url('./images/background.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
+                radial-gradient(ellipse at 30% 90%, rgba(154, 139, 79, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 85%, rgba(154, 139, 79, 0.15) 0%, transparent 40%),
+                linear-gradient(to top, #1a1423 0%, #372a4b 40%, #0d1117 100%);
         }
 
-        /* --- MODIFICADO: Padding superior reducido para mover el header hacia arriba --- */
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1.5rem 4rem; position: fixed; width: 100%; top: 0;
+            padding: 2.5rem 4rem; position: fixed; width: 100%; top: 0;
             box-sizing: border-box; z-index: 10;
         }
         .logo-container { text-align: left; }
         
-        /* --- MODIFICADO: Tamaño y fuente del logo --- */
+        /* --- MODIFICADO: Tamaño del logo reducido --- */
         .logo {
-            font-family: 'Angelica', var(--font-logo); /* Cambiado a Angelica, con fallback */
-            font-size: 3.5rem; /* Aumentado desde 2.5rem */
+            font-family: 'Angelica', var(--font-logo);
+            font-size: 2.8rem; /* Reducido desde 3.5rem */
             font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
             color: var(--color-gold); text-shadow: 0 0 15px rgba(154, 139, 79, 0.4);
             margin: 0;
@@ -75,10 +59,10 @@
             position: relative; z-index: 5;
         }
         .text-container { max-width: 600px; text-align: left; }
-        
+
         /* --- MODIFICADO: Tamaño del h1 reducido --- */
         .text-container h1 {
-            font-family: var(--font-headline); font-size: 3.8rem; /* Disminuido desde 4.2rem */
+            font-family: var(--font-headline); font-size: 3.5rem; /* Reducido desde 3.8rem */
             font-weight: 500; margin: 0 0 1rem 0; color: var(--color-text);
         }
         .text-container p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.7; }
@@ -250,10 +234,11 @@
     </div>
 
     <script>
-        // --- MODIFICADO: Script completo reestructurado para ser a prueba de fallos ---
+        // --- INICIO DEL SCRIPT MODIFICADO ---
+
         const N8N_WEBHOOK_URL = 'https://n8n.jeskocloud.online/webhook/1fb4b168-aeaa-477c-8b4a-becf9251ad57';
 
-        // Declaraciones de Elementos del DOM
+        // --- 1. Declaraciones de todos los elementos del DOM ---
         const openChatMainBtn = document.getElementById('open-chat-main');
         const chatWidget = document.getElementById('chat-widget');
         const chatBubbleBtn = document.getElementById('chat-bubble-button');
@@ -262,8 +247,9 @@
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
         const chatForm = document.getElementById('chat-form');
-
-        // Función a prueba de fallos para obtener/crear el Session ID
+        
+        // --- 2. Lógica de Session ID ---
+        // Función dedicada para obtener o crear el ID de sesión. Es más robusta.
         function getSessionId() {
             let currentSessionId = sessionStorage.getItem('terranovaChatSessionId');
             if (!currentSessionId) {
@@ -273,27 +259,22 @@
             return currentSessionId;
         }
 
-        // Lógica de UI del Chat
+        // --- 3. Funciones de la Interfaz de Usuario (UI) ---
         function toggleChat() { chatWidget.classList.toggle('active'); }
         function openChat() { chatWidget.classList.add('active'); }
         function closeChat() { chatWidget.classList.remove('active'); }
         
         function resetChat() {
             closeChat();
-            sessionStorage.removeItem('terranovaChatSessionId'); // Borramos el ID de sesión
+            // Borramos el ID de la sesión actual al cerrar.
+            sessionStorage.removeItem('terranovaChatSessionId');
             setTimeout(() => {
                 chatMessages.innerHTML = '';
                 addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
             }, 400); 
         }
 
-        // Event Listeners para la UI
-        openChatMainBtn.addEventListener('click', openChat);
-        chatBubbleBtn.addEventListener('click', toggleChat);
-        minimizeBtn.addEventListener('click', closeChat);
-        closeBtn.addEventListener('click', resetChat);
-        
-        // Función para añadir mensajes al DOM
+        // --- 4. Funciones del Chat ---
         function addMessage(text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
@@ -302,16 +283,16 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Función principal para manejar el envío de mensajes
         async function handleFormSubmit(event) {
             event.preventDefault();
             const messageText = userInput.value.trim();
             if (messageText === '') return;
+            
             addMessage(messageText, 'user');
             userInput.value = '';
             
             try {
-                // Obtenemos el ID de sesión justo antes de enviar
+                // Obtenemos el ID de sesión justo antes de realizar la petición.
                 const sessionId = getSessionId();
                 
                 const response = await fetch(N8N_WEBHOOK_URL, {
@@ -319,23 +300,29 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         message: messageText,
-                        sessionId: sessionId // Se añade el ID de sesión a la petición
+                        sessionId: sessionId // Se añade el ID de sesión a la petición.
                     })
                 });
                 if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                 const data = await response.json();
                 addMessage(data.reply || 'No he recibido una respuesta válida.', 'bot');
-            } catch (error)
+            } catch (error) {
                 console.error('Fallo la comunicación con n8n:', error);
                 addMessage('Lo siento, ocurrió un error de conexión.', 'bot');
             }
         }
         
-        // Event Listener para el formulario
+        // --- 5. Asignación de Eventos ---
+        openChatMainBtn.addEventListener('click', openChat);
+        chatBubbleBtn.addEventListener('click', toggleChat);
+        minimizeBtn.addEventListener('click', closeChat);
+        closeBtn.addEventListener('click', resetChat);
         chatForm.addEventListener('submit', handleFormSubmit);
         
-        // Mensaje de bienvenida inicial
+        // --- 6. Mensaje de bienvenida inicial ---
         addMessage('Bienvenido a Terranova. Soy su asistente virtual, ¿en qué puedo ayudarle hoy?', 'bot');
+        
+        // --- FIN DEL SCRIPT MODIFICADO ---
     </script>
 </body>
 </html>
